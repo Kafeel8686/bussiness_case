@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HOOPP: Business Case></title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #444;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+        }
+        h2 {
+            color: #555;
+            border-bottom: 2px solid #e2e2e2;
+            padding-bottom: 0.3em;
+            margin-top: 1.5em;
+        }
+        h3 {
+            color: #666;
+            margin-top: 1em;
+        }
+        p {
+            margin-bottom: 1em;
+        }
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2em;
+            background-color: #fff;
+        }
+        th, td {
+            border: 1px solid #e2e2e2;
+            padding: 12px;
+            text-align: left;
+            font-size: 0.95em;
+        }
+        th {
+            background-color: #f0f0f0;
+            color: #333;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        /* Image Styles */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 1em auto;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        /* Navigation Styles */
+        .nav {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #fff;
+            border: 1px solid #e2e2e2;
+            padding: 10px 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .nav a {
+            display: block;
+            color: #007BFF;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        /* Footer Styles */
+        .footer {
+            text-align: center;
+            color: #888;
+            margin-top: 2em;
+            font-size: 0.9em;
+        }
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            body {
+                margin: 10px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>BTCUSDT Data Quality Report</h1>
+
+    <div class="section">
+        <h2>Description of Steps Taken</h2>
+        {% for step in report.steps_description %}
+        <h3>{{ step.title }}</h3>
+        <p>{{ step.description }}</p>
+        {% endfor %}
+    </div>
+    
+    <div class="section">
+        <h2>Data Catalogue</h2>
+        <table>
+            <tr>
+                <th>Column Name</th>
+                <th>Description</th>
+            </tr>
+            {% for item in report.data_catalogue %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.description }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <p><strong>Note:</strong> All timestamps are in milliseconds since the Unix epoch (UTC). Time zone considerations are important when interpreting the data.</p>
+    </div>
+  
+    <div class="section">
+        <h2>1. Data Completeness </h2>
+        <p> Overall data is in mins check if every minute data is availalble from start of period to end of period </p>
+        <p><strong>Total Expected Timestamps:</strong> {{ report.completeness.total_expected }}</p>
+        <p><strong>Total Missing Timestamps:</strong> {{ report.completeness.total_missing }}</p>
+        <p><strong>Percentage of Missing Data:</strong> {{ report.completeness.missing_percentage }}%</p>
+    </div>
+
+    <div class="section">
+        <h2>2. Data Quality</h2>
+        <h3>2.1 Missing Values</h3>
+        <p>
+            checked for missing data by comparing the expected number of 1-minute intervals with the actual data. The expected timestamps from {{ start_date }} to {{ end_date }} are {{ expected_timestamps }} minutes. Missing timestamps indicate gaps in data collection.
+        </p>
+        <table>
+            <tr>
+                <th>Column</th>
+                <th>Missing Values</th>
+            </tr>
+            {% for column, count in report.quality.missing_values.items() %}
+            <tr>
+                <td>{{ column }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h3>2.2 Duplicates</h3>
+        <p>
+            Checked for duplicate entries in the dataset. Duplicates can distort statistical analyses and were removed to maintain data integrity.
+        </p>
+    
+        <p>Total Duplicated Rows: {{ report.quality.duplicates }}</p>
+
+        <h3>2.3 Statistical Summary</h3>
+        <table>
+            <tr>
+                <th>Statistic</th>
+                {% for col in report.quality.stats_summary %}
+                <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+            {% for stat in ['count', 'mean', 'std', 'min', '25%', '50%', '75%', 'max'] %}
+            <tr>
+                <td>{{ stat }}</td>
+                {% for col in report.quality.stats_summary %}
+                <td>{{ report.quality.stats_summary[col][stat]|default('N/A') }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h3>2.4 Inconsistent Prices</h3>
+        
+        <p>Verified logical consistency of price data by ensuring that 'High' prices are not lower than 'Low', 'Open', or 'Close' prices, and 'Low' prices are not higher than 'Open' or 'Close' prices. Inconsistencies may indicate data errors.
+
+        </p>
+        <p>Number of Rows with Inconsistent Price Data: {{ report.quality.inconsistent_prices_count }}</p>
+
+        <h3>2.5 Zero or Negative Values</h3>
+        <p> Overall there are zero value  in volumne columns in 2017 ( assumption is binance was not much popular it was launched in 2017 july trading were made in the platform  ) 
+            and few timestamps in following 2019,2020,2021,2023 years volumne was zero</p>
+
+        <p>Number of Rows with Negative Values: {{ report.quality.negative_values_count }}</p>
+        <p>Number of Rows with Zero or Negative Values overall in open,low,high,close & volume columns : {{ report.quality.zero_values_count }}</p>
+        <p>Number of Rows with Zero Volume: {{ report.quality.zero_volume_count }}</p>
+        <p>Number of Rows with Distinct Date with Zero Volume: {{ report.quality.zero_volume_dates }}</p>
+
+    </div>
+
+    <div class="section">
+        <h2>3. Anomalies Detection</h2>
+
+        <h3>3.1 Price Anomalies</h3>
+        <p> Identify data points where percentage  change in closing price more than 5 % in a minute</p>
+        <p>Number of Price Anomalies Detected: {{ report.anomalies.price_anomalies_count }}</p>
+        <img src="{{ report.anomalies.price_anomalies_plot }}" alt="Price Anomalies">
+
+        <h3>3.2 Volume Anomalies</h3>
+        <p> Identify data points where the trading volume is significantly different from the average (more than 3 standard deviations away).</p>
+        <p>Number of Volume Anomalies Detected: {{ report.anomalies.volume_anomalies_count }}</p>
+        <img src="{{ report.anomalies.volume_anomalies_plot }}" alt="Volume Anomalies">
+
+        <h3>3.3 Distribution of Price Changes</h3>
+        <img src="{{ report.anomalies.price_change_dist_plot }}" alt="Price Change Distribution">
+
+        <h3>3.4 Close Prices and Moving Average</h3>
+        <img src="{{ report.anomalies.close_price_ma_plot }}" alt="Close Price Moving Average Price Change">
+
+    </div>
+
+    <div class="section">
+        <h2>4. Closing Price Over Time</h2>
+        <img src="{{ report.closing_price_plot }}" alt="Closing Price Over Time">
+    </div>
+
+    <div class="section">
+        <h2>5. Observations and Comments</h2>
+        <p>The dataset demonstrates high completeness and quality, making it suitable for various trading and investment analyses. The identified anomalies correspond to real market events rather than data issues.</p>
+
+    </div>
+
+</body>
+</html>

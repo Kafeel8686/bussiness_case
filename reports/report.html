@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HOOPP: Business Case></title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #444;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+        }
+        h2 {
+            color: #555;
+            border-bottom: 2px solid #e2e2e2;
+            padding-bottom: 0.3em;
+            margin-top: 1.5em;
+        }
+        h3 {
+            color: #666;
+            margin-top: 1em;
+        }
+        p {
+            margin-bottom: 1em;
+        }
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2em;
+            background-color: #fff;
+        }
+        th, td {
+            border: 1px solid #e2e2e2;
+            padding: 12px;
+            text-align: left;
+            font-size: 0.95em;
+        }
+        th {
+            background-color: #f0f0f0;
+            color: #333;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        /* Image Styles */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 1em auto;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        /* Navigation Styles */
+        .nav {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #fff;
+            border: 1px solid #e2e2e2;
+            padding: 10px 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .nav a {
+            display: block;
+            color: #007BFF;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        /* Footer Styles */
+        .footer {
+            text-align: center;
+            color: #888;
+            margin-top: 2em;
+            font-size: 0.9em;
+        }
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            body {
+                margin: 10px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>BTCUSDT Data Quality Report</h1>
+
+    <div class="section">
+        <h2>Description of Steps Taken</h2>
+        
+        <h3>Data Download</h3>
+        <p>Downloaded historical 1-minute Kline data for BTCUSDT from Binance starting from January 2017 to June 2024 using asynchronous requests, ensuring data is not re-downloaded if it already exists.</p>
+        
+        <h3>Data Preprocessing</h3>
+        <p>Unzipped and read CSV files, combined them into a single DataFrame, and assigned appropriate column names.</p>
+        
+        <h3>Data Quality Evaluation</h3>
+        <p>Evaluated the dataset for completeness, missing values, duplicates, data types, logical consistency, and anomalies.</p>
+        
+        <h3>Anomaly Detection</h3>
+        <p>Identified unusual spikes and drops in price and volume using statistical methods and moving averages.</p>
+        
+        <h3>Report Generation</h3>
+        <p>Generated an HTML report summarizing the findings, including charts and observations.</p>
+        
+    </div>
+    
+    <div class="section">
+        <h2>Data Catalogue</h2>
+        <table>
+            <tr>
+                <th>Column Name</th>
+                <th>Description</th>
+            </tr>
+            
+            <tr>
+                <td>Open time</td>
+                <td>Start time of the candlestick (in milliseconds since epoch, UTC).</td>
+            </tr>
+            
+            <tr>
+                <td>Open</td>
+                <td>Price at which the candlestick opened.</td>
+            </tr>
+            
+            <tr>
+                <td>High</td>
+                <td>Highest price during the candlestick period.</td>
+            </tr>
+            
+            <tr>
+                <td>Low</td>
+                <td>Lowest price during the candlestick period.</td>
+            </tr>
+            
+            <tr>
+                <td>Close</td>
+                <td>Price at which the candlestick closed.</td>
+            </tr>
+            
+            <tr>
+                <td>Volume</td>
+                <td>Trading volume during the candlestick period.</td>
+            </tr>
+            
+            <tr>
+                <td>Close time</td>
+                <td>End time of the candlestick (in milliseconds since epoch, UTC).</td>
+            </tr>
+            
+            <tr>
+                <td>Quote asset volume</td>
+                <td>Volume of the quote asset traded during the candlestick period.</td>
+            </tr>
+            
+            <tr>
+                <td>Number of trades</td>
+                <td>Number of trades that took place during the candlestick period.</td>
+            </tr>
+            
+            <tr>
+                <td>Taker buy base asset volume</td>
+                <td>Volume of the base asset bought by takers.</td>
+            </tr>
+            
+            <tr>
+                <td>Taker buy quote asset volume</td>
+                <td>Volume of the quote asset bought by takers.</td>
+            </tr>
+            
+            <tr>
+                <td>Ignore</td>
+                <td>This field is deprecated and should be ignored.</td>
+            </tr>
+            
+        </table>
+        <p><strong>Note:</strong> All timestamps are in milliseconds since the Unix epoch (UTC). Time zone considerations are important when interpreting the data.</p>
+    </div>
+  
+    <div class="section">
+        <h2>1. Data Completeness </h2>
+        <p> Overall data is in mins check if every minute data is availalble from start of period to end of period </p>
+        <p><strong>Total Expected Timestamps:</strong> 3614160</p>
+        <p><strong>Total Missing Timestamps:</strong> 30163</p>
+        <p><strong>Percentage of Missing Data:</strong> 0.834578%</p>
+    </div>
+
+    <div class="section">
+        <h2>2. Data Quality</h2>
+        <h3>2.1 Missing Values</h3>
+        <p>
+            checked for missing data by comparing the expected number of 1-minute intervals with the actual data. The expected timestamps from  to  are  minutes. Missing timestamps indicate gaps in data collection.
+        </p>
+        <table>
+            <tr>
+                <th>Column</th>
+                <th>Missing Values</th>
+            </tr>
+            
+            <tr>
+                <td>Open time</td>
+                <td>0</td>
+            </tr>
+            
+            <tr>
+                <td>Open</td>
+                <td>0</td>
+            </tr>
+            
+            <tr>
+                <td>High</td>
+                <td>0</td>
+            </tr>
+            
+            <tr>
+                <td>Low</td>
+                <td>0</td>
+            </tr>
+            
+            <tr>
+                <td>Close</td>
+                <td>0</td>
+            </tr>
+            
+            <tr>
+                <td>Volume</td>
+                <td>0</td>
+            </tr>
+            
+            <tr>
+                <td>Close time</td>
+                <td>0</td>
+            </tr>
+            
+            <tr>
+                <td>Base asset volume</td>
+                <td>0</td>
+            </tr>
+            
+            <tr>
+                <td>Number of trades</td>
+                <td>0</td>
+            </tr>
+            
+            <tr>
+                <td>Taker buy base volume</td>
+                <td>0</td>
+            </tr>
+            
+            <tr>
+                <td>Taker buy base asset volume</td>
+                <td>0</td>
+            </tr>
+            
+            <tr>
+                <td>Ignore</td>
+                <td>0</td>
+            </tr>
+            
+        </table>
+
+        <h3>2.2 Duplicates</h3>
+        <p>
+            Checked for duplicate entries in the dataset. Duplicates can distort statistical analyses and were removed to maintain data integrity.
+        </p>
+    
+        <p>Total Duplicated Rows: 0</p>
+
+        <h3>2.3 Statistical Summary</h3>
+        <table>
+            <tr>
+                <th>Statistic</th>
+                
+                <th>Open</th>
+                
+                <th>High</th>
+                
+                <th>Low</th>
+                
+                <th>Close</th>
+                
+                <th>Volume</th>
+                
+                <th>Base asset volume</th>
+                
+                <th>Taker buy base volume</th>
+                
+                <th>Taker buy base asset volume</th>
+                
+            </tr>
+            
+            <tr>
+                <td>count</td>
+                
+                <td>3605599.0</td>
+                
+                <td>3605599.0</td>
+                
+                <td>3605599.0</td>
+                
+                <td>3605599.0</td>
+                
+                <td>3605599.0</td>
+                
+                <td>3605599.0</td>
+                
+                <td>3605599.0</td>
+                
+                <td>3605599.0</td>
+                
+            </tr>
+            
+            <tr>
+                <td>mean</td>
+                
+                <td>23717.008740065397</td>
+                
+                <td>23730.083614974934</td>
+                
+                <td>23703.796555959496</td>
+                
+                <td>23717.01433903494</td>
+                
+                <td>49.28314593878272</td>
+                
+                <td>1167109.0824170997</td>
+                
+                <td>24.51144573529641</td>
+                
+                <td>578485.5105616625</td>
+                
+            </tr>
+            
+            <tr>
+                <td>std</td>
+                
+                <td>18518.05334672933</td>
+                
+                <td>18527.193569098985</td>
+                
+                <td>18508.890886029818</td>
+                
+                <td>18518.07169538101</td>
+                
+                <td>92.7960090771949</td>
+                
+                <td>2307913.6241452396</td>
+                
+                <td>47.27168614808977</td>
+                
+                <td>1184981.244942381</td>
+                
+            </tr>
+            
+            <tr>
+                <td>min</td>
+                
+                <td>2830.0</td>
+                
+                <td>2830.0</td>
+                
+                <td>2817.0</td>
+                
+                <td>2817.0</td>
+                
+                <td>0.0</td>
+                
+                <td>0.0</td>
+                
+                <td>0.0</td>
+                
+                <td>0.0</td>
+                
+            </tr>
+            
+            <tr>
+                <td>25%</td>
+                
+                <td>8191.465</td>
+                
+                <td>8196.54</td>
+                
+                <td>8186.19</td>
+                
+                <td>8191.465</td>
+                
+                <td>10.472939499999999</td>
+                
+                <td>128260.245878405</td>
+                
+                <td>4.698639</td>
+                
+                <td>56207.81822521</td>
+                
+            </tr>
+            
+            <tr>
+                <td>50%</td>
+                
+                <td>18121.17</td>
+                
+                <td>18134.16</td>
+                
+                <td>18109.3</td>
+                
+                <td>18121.51</td>
+                
+                <td>22.243575</td>
+                
+                <td>418628.08475865</td>
+                
+                <td>10.69791</td>
+                
+                <td>194017.219087</td>
+                
+            </tr>
+            
+            <tr>
+                <td>75%</td>
+                
+                <td>37041.555</td>
+                
+                <td>37067.26</td>
+                
+                <td>37016.995</td>
+                
+                <td>37041.744999999995</td>
+                
+                <td>49.575194499999995</td>
+                
+                <td>1292690.7421944002</td>
+                
+                <td>24.785286999999997</td>
+                
+                <td>631904.78369531</td>
+                
+            </tr>
+            
+            <tr>
+                <td>max</td>
+                
+                <td>73775.55</td>
+                
+                <td>73777.0</td>
+                
+                <td>73682.61</td>
+                
+                <td>73775.54</td>
+                
+                <td>5877.77545</td>
+                
+                <td>145955668.3328495</td>
+                
+                <td>3537.45296</td>
+                
+                <td>89475505.03325081</td>
+                
+            </tr>
+            
+        </table>
+
+        <h3>2.4 Inconsistent Prices</h3>
+        
+        <p>Verified logical consistency of price data by ensuring that 'High' prices are not lower than 'Low', 'Open', or 'Close' prices, and 'Low' prices are not higher than 'Open' or 'Close' prices. Inconsistencies may indicate data errors.
+
+        </p>
+        <p>Number of Rows with Inconsistent Price Data: 0</p>
+
+        <h3>2.5 Zero or Negative Values</h3>
+        <p> Overall there are zero value  in volumne columns in 2017 ( assumption is binance was not much popular it was launched in 2017 july trading were made in the platform  ) 
+            and few timestamps in following 2019,2020,2021,2023 years volumne was zero</p>
+
+        <p>Number of Rows with Negative Values: 0</p>
+        <p>Number of Rows with Zero or Negative Values overall in open,low,high,close & volume columns : 24003</p>
+        <p>Number of Rows with Zero Volume: 24003</p>
+        <p>Number of Rows with Distinct Date with Zero Volume: ['2017-08-17', '2017-08-18', '2017-08-19', '2017-08-20', '2017-08-21', '2017-08-22', '2017-08-23', '2017-08-24', '2017-08-25', '2017-08-26', '2017-08-27', '2017-08-28', '2017-08-29', '2017-08-30', '2017-08-31', '2017-09-01', '2017-09-02', '2017-09-03', '2017-09-04', '2017-09-05', '2017-09-06', '2017-09-07', '2017-09-08', '2017-09-09', '2017-09-10', '2017-09-11', '2017-09-12', '2017-09-13', '2017-09-14', '2017-09-15', '2017-09-16', '2017-09-17', '2017-09-18', '2017-09-19', '2017-09-20', '2017-09-21', '2017-09-22', '2017-09-23', '2017-09-24', '2017-09-25', '2017-09-26', '2017-09-27', '2017-09-28', '2017-09-29', '2017-09-30', '2017-10-01', '2017-10-02', '2017-10-03', '2017-10-04', '2017-10-05', '2017-10-06', '2017-10-07', '2017-10-08', '2017-10-09', '2017-10-10', '2017-10-11', '2017-10-12', '2017-10-13', '2017-10-14', '2017-10-15', '2017-10-16', '2017-10-17', '2017-10-18', '2017-10-19', '2017-10-20', '2017-10-21', '2017-10-22', '2017-10-23', '2017-10-24', '2017-10-25', '2017-10-26', '2017-10-27', '2017-10-28', '2017-10-29', '2017-10-30', '2017-10-31', '2017-11-01', '2017-11-02', '2017-11-03', '2017-11-04', '2017-11-05', '2017-11-06', '2017-11-07', '2017-11-08', '2017-11-09', '2017-11-10', '2017-11-11', '2017-11-12', '2017-11-13', '2017-11-14', '2017-11-15', '2017-11-16', '2017-11-17', '2017-11-18', '2017-11-19', '2017-11-20', '2017-11-21', '2017-11-22', '2017-11-23', '2017-11-24', '2017-11-25', '2017-11-26', '2017-11-27', '2017-11-28', '2017-11-29', '2017-12-01', '2017-12-02', '2017-12-03', '2017-12-04', '2017-12-05', '2017-12-06', '2017-12-07', '2017-12-16', '2018-03-04', '2019-06-07', '2019-11-13', '2020-12-21', '2021-01-11', '2021-02-11', '2023-03-24']</p>
+
+    </div>
+
+    <div class="section">
+        <h2>3. Anomalies Detection</h2>
+
+        <h3>3.1 Price Anomalies</h3>
+        <p> Identify data points where percentage  change in closing price more than 5 % in a minute</p>
+        <p>Number of Price Anomalies Detected: 22</p>
+        <img src="figures\price_anomalies.png" alt="Price Anomalies">
+
+        <h3>3.2 Volume Anomalies</h3>
+        <p> Identify data points where the trading volume is significantly different from the average (more than 3 standard deviations away).</p>
+        <p>Number of Volume Anomalies Detected: 62677</p>
+        <img src="figures\volume_anomalies.png" alt="Volume Anomalies">
+
+        <h3>3.3 Distribution of Price Changes</h3>
+        <img src="figures\price_change_distribution.png" alt="Price Change Distribution">
+
+        <h3>3.4 Close Prices and Moving Average</h3>
+        <img src="figures\close_price_ma.png" alt="Close Price Moving Average Price Change">
+
+    </div>
+
+    <div class="section">
+        <h2>4. Closing Price Over Time</h2>
+        <img src="figures\closing_price_over_time.png" alt="Closing Price Over Time">
+    </div>
+
+    <div class="section">
+        <h2>5. Observations and Comments</h2>
+        <p>The dataset demonstrates high completeness and quality, making it suitable for various trading and investment analyses. The identified anomalies correspond to real market events rather than data issues.</p>
+
+    </div>
+
+</body>
+</html>
